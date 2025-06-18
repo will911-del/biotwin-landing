@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BioTwin – Your Body. Simulated.</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0c0c1e;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .logo { margin-bottom: 2rem; }
+    .hero { text-align: center; }
+    h1 {
+      font-size: 3rem;
+      color: #8dc4ff;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.25rem;
+      color: #cbd5e0;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    input[type="email"] {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: none;
+      width: 300px;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+    button {
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      border: none;
+      background-color: #4f46e5;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .features {
+      margin-top: 4rem;
+      max-width: 700px;
+      text-align: left;
+    }
+    .features li {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnZoJHZr2Eve9jxGqnCJyCQC2rOgKo",
+      authDomain: "biotwin-waitlist.firebaseapp.com",
+      projectId: "biotwin-waitlist",
+      storageBucket: "biotwin-waitlist.appspot.com",
+      messagingSenderId: "944966016990",
+      appId: "1:944966016990:web:7bebe954597267f39f813",
+      measurementId: "G-JTRDCOXGTL"
+    };
+
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Wait for page to load
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("waitlist-form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = form.email.value;
+
+        try {
+          await addDoc(collection(db, "waitlist"), { email, timestamp: new Date() });
+          alert("✅ You’re on the BioTwin waitlist!");
+          form.reset();
+        } catch (err) {
+          console.error("Error saving email:", err);
+          alert("❌ Error saving your email. Try again later.");
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="logo">
+    <img src="biotwin logo.png" alt="BioTwin Logo" width="120" />
+  </div>
+
+  <div class="hero">
+    <h1>Your Body. Simulated.</h1>
+    <p>BioTwin uses your DNA + daily habits to simulate how your body responds to supplements, food, and lifestyle changes — before you try them.</p>
+
+    <form id="waitlist-form">
+      <input type="email" name="email" placeholder="Enter your email" required />
+      <button type="submit">Join the Waitlist</button>
+    </form>
+  </div>
+
+  <ul class="features">
+    <li>🧬 Upload 23andMe data to personalize everything</li>
+    <li>🍎 Simulate how food or supplements affect <em>you</em></li>
+    <li>⏳ Predict long-term effects of daily routines</li>
+    <li>🔬 Powered by AI trained on real health science</li>
+  </ul>
+</body>
+</html>
+
